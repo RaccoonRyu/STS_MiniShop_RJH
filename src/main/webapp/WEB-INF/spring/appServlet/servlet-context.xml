@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation=
+	"http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+<mvc:annotation-driven></mvc:annotation-driven><!-- @ 어노테이션 사용을 위한 태그 추가 -->
+<mvc:default-servlet-handler/><!-- mvc기본태그 -->
+
+<!-- 직접 주소요청시 처리할 페이지 등록 부분 -->
+<!-- <mvc:view-controller path="/" view-name="main"/> / 요청시 /WEB-INF/views/main.jsp 호출 -->
+<!-- 삭제 MainController에서 사용 -->
+<mvc:view-controller path="/memberForm" view-name="memberForm"/>
+<mvc:view-controller path="/loginForm" view-name="loginForm"/>
+<mvc:view-controller path="/myPage" view-name="mypage"/><!-- mypage.jsp 호출-->
+<mvc:view-controller path="/cartList" view-name="cartList"/><!-- cartList.jsp 호출-->
+<mvc:view-controller path="/orderConfirm" view-name="orderConfirm"/><!-- orderConfirm.jsp 호출-->
+<mvc:view-controller path="/orderAllConfirm" view-name="orderAllConfirm"/><!-- orderAllConfirm.jsp 호출-->
+<mvc:view-controller path="/orderDone" view-name="orderDone"/><!-- orderDone.jsp 호출-->
+<mvc:view-controller path="/orderAllDone" view-name="orderAllDone"/><!-- orderAllDone.jsp 호출-->
+
+<!-- web-inf의 하위 폴더는 반드시 리소스에 등록 후 사용 -->
+<mvc:resources location="/WEB-INF/views/images/" mapping="/images/**"/>
+<mvc:resources location="/WEB-INF/views/css/" mapping="/css/**"/>
+<mvc:resources location="/WEB-INF/views/js/" mapping="/js/**"/>
+
+<mvc:interceptors>
+	<mvc:interceptor>
+		<mvc:mapping path="/loginCheck/**"/>
+		<ref bean="loginCheckInterceptor"/>
+	</mvc:interceptor>
+</mvc:interceptors>
+<bean id="loginCheckInterceptor" class="com.interceptor.LoginCheckInterceptor"></bean>
+
+<!-- controller 빈 등록 부분 -->
+<context:component-scan base-package="com.*"></context:component-scan>
+<!-- @repository, @service 등 어노테이션을 통해 자동생성이 가능하다. -->
+
+<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<property name="prefix" value="/WEB-INF/views/"></property>
+	<property name="suffix" value=".jsp"></property>
+</bean>
+</beans>
